@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dog, PawPrint, Plus, Trash2, ChevronRight } from "lucide-react";
+import { Dog, PawPrint, Plus, Trash2, ChevronRight, Eye } from "lucide-react";
 import type { Dog as DogType } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -58,7 +58,7 @@ export default function Home() {
             Upload photos of your dogs along with their Embark DNA test results, then challenge yourself or friends to guess the breed percentages!
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 flex-wrap">
             <Button
               size="lg"
               onClick={() => navigate("/add-dog")}
@@ -66,6 +66,15 @@ export default function Home() {
             >
               <Plus className="w-4 h-4 mr-2" />
               Add a Dog
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => navigate("/browse")}
+              data-testid="button-browse-dogs"
+            >
+              <Eye className="w-4 h-4 mr-2" />
+              Browse Dogs
             </Button>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">

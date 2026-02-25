@@ -31,6 +31,7 @@ A web app where users upload photos of their dogs along with Embark DNA breed te
 - `/` - Home page with dog pool and quiz start
 - `/add-dog` - Add a new dog with photos and breed percentages
 - `/quiz?count=N` - Quiz game with N random dogs
+- `/browse` - Browse all dogs and view their breed results with detail modal
 
 ## Theme
 - Warm orange primary color (hue 25)
