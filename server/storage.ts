@@ -1,38 +1,32 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-
-// modify the interface with any CRUD methods
-// you might need
+import { type Dog, type InsertDog, dogs } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  getDogs(): Promise<Dog[]>;
+  getDog(id: number): Promise<Dog | undefined>;
+  createDog(dog: InsertDog): Promise<Dog>;
+  deleteDog(id: number): Promise<void>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
+export class DatabaseStorage implements IStorage {
+  async getDogs(): Promise<Dog[]> {
+    return await db.select().from(dogs);
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async getDog(id: number): Promise<Dog | undefined> {
+    const [dog] = await db.select().from(dogs).where(eq(dogs.id, id));
+    return dog;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+  async createDog(dog: InsertDog): Promise<Dog> {
+    const [created] = await db.insert(dogs).values(dog).returning();
+    return created;
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async deleteDog(id: number): Promise<void> {
+    await db.delete(dogs).where(eq(dogs.id, id));
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
